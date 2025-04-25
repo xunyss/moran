@@ -12,6 +12,27 @@ set(CMAKE_CXX_STANDARD 14)              # 20
 #---------------------------------------------------------------------------------------------------
 # cmake environment
 #---------------------------------------------------------------------------------------------------
+
+##TEST
+message(STATUS "debug===")
+message(NOTICE "${CMAKE_SYSTEM_NAME}")
+message("${WIN32}")
+message("${UNIX}")
+message("${MINGW}")
+message("${MSVC}")
+#get_cmake_property(_variableNames VARIABLES)
+#foreach (_variableName ${_variableNames})
+#    message("${_variableName}=${${_variableName}}")
+#endforeach()
+##TEST
+
+# botan version
+set(BOTAN_VERSION 2.19.5)
+# system requirement / clion
+# Windows - MinGW
+# MacOS - cmake
+# Linux -
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)					# 64bit
     set(x_arch "64")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)				# 32bit
@@ -37,7 +58,8 @@ else()											# release
 endif()
 
 #set(BOTAN_HOME		"c:/xdev/works/clion-projects/botan/Botan-2.17.3_${x_cc}_x86_${x_arch}${x_link}${x_build}")
-set(BOTAN_HOME		"c:/xdev/works/moran/botan/Botan-2.19.5")
+#set(BOTAN_HOME		"c:/xdev/works/moran/botan/Botan-2.19.5")
+set(BOTAN_HOME		"botan/Botan-${BOTAN_VERSION}")
 set(BOTAN_INCLUDE	"${BOTAN_HOME}/build/include")
 set(BOTAN_LIB		"${x_botan}")
 set(TARGET_LIBRARY	"${x_lib}")

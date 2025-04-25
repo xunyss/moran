@@ -22,3 +22,7 @@ make
 libbotan-2.a, libbotan-2.so files are created.
 #### MacOS
 mac
+
+
+# tmp
+PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1\bin\cmake\win\x64\bin
