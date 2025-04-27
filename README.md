@@ -37,6 +37,8 @@ PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1\bin\cmake\win\x64\bin
 ```
 /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/xuny/xdev/work/xunyss/moran -B /Users/xuny/xdev/work/xunyss/moran/cmake-build-debug
 export DYLD_LIBRARY_PATH=.
+export DYLD_LIBRARY_PATH=/Users/xuny/xdev/work/xunyss/moran/botan/Botan-2.19.5
+install > copy to "/usr/local/lib"
 ```
 #### linux
 ```
