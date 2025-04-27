@@ -1,0 +1,12 @@
+#! /bin/bash
+
+BOTAN_VERSION="2.19.5"
+
+# download botan library
+# https://botan.randombit.net/releases/Botan-2.19.5.tar.xz
+#mkdir botan
+#cd botan
+#curl -O https://botan.randombit.net/releases/Botan-$BOTAN_VERSION.tar.xz
+#tar xvf Botan-$BOTAN_VERSION.tar.xz
+echo Botan-$BOTAN_VERSION.tar.xz
+
