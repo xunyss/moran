@@ -3,7 +3,7 @@
 	#define DLL_EXPORTING
 #endif
 
-#include "moran.h"
+#include "tbcrypto.h"
 #include <botan/pipe.h>
 #include <botan/filters.h>
 #include <botan/hex.h>
@@ -11,9 +11,9 @@
 #define CIPHER_ALGORITHM	"AES-256/CBC"
 #define HASH_ALGORITHM		"SHA-256"
 
-//	#define TEST_KEY		"259A0088ACFDC94E920BE1AB92CB8C8206C3D00B2174DDD4EF1EFD6EF7C393AD"
-//	#define TEST_IV			"764533506158694563386856796F6F75"
-//	#define TEST_SALT		"832B15B4F9E5D2E123567A5CC95DF78A"
+//	#define TOSSBANK_KEY		"259A0088ACFDC94E920BE1AB92CB8C8206C3D00B2174DDD4EF1EFD6EF7C393AD"
+//	#define TOSSBANK_IV			"764533506158694563386856796F6F75"
+//	#define TOSSBANK_SALT		"832B15B4F9E5D2E123567A5CC95DF78A"
 
 
 std::string encrypt(std::string hex_key, std::string hex_iv, std::string plain)
@@ -98,8 +98,8 @@ int decrypt(char* hex_key, char* hex_iv,
 }
 
 int hash(char* hex_salt,
-		 char* plain, unsigned int plain_length,
-		 char* cipher, unsigned int* cipher_length)
+		  char* plain, unsigned int plain_length,
+		  char* cipher, unsigned int* cipher_length)
 {
 	try {
 		std::string input(plain, 0, plain_length);

@@ -82,6 +82,7 @@ endif()
 #set(BOTAN_HOME		"c:/xdev/works/clion-projects/botan/Botan-2.17.3_${x_cc}_x86_${x_arch}${x_link}${x_build}")
 #set(BOTAN_HOME		"c:/xdev/works/moran/botan/Botan-2.19.5")
 set(BOTAN_INCLUDE	"${BOTAN_HOME}/build/include")
+#set(BOTAN_INCLUDE	"${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/build/include")
 set(BOTAN_LIB		"${x_botan}")
 set(TARGET_LIBRARY	"${x_lib}")
 

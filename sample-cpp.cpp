@@ -14,7 +14,7 @@ int main() {
 
 	// exception
 	try {
-		std::string decrypted = decrypt(TEST_SALT, TEST_IV, "1234");
+		std::string decrypted = decrypt(TEST_KEY, TEST_IV, "1234");
 		std::cout << "success: " << decrypted << std::endl;
 	}
 	catch (TBCryptoException &ex) {
