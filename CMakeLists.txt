@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD 14)              # 20
 
 ##########################
 ## validation requirements
-# botan version
-set(BOTAN_VERSION 2.19.5)
+file(READ "${CMAKE_SOURCE_DIR}/botan_version.txt" VERSION_STR)
+string(STRIP "${VERSION_STR}" BOTAN_VERSION)
 
 if(WIN32)
 	if(MINGW)
@@ -27,8 +27,14 @@ if(WIN32)
 	elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)		# target arch: x86/i686
 		set(targetArch "x86")
 	endif()
+	set(BOTAN_HOME "botan/Botan-${BOTAN_VERSION}_${winToolChain}_${targetArch}_${linkType}_${CMAKE_BUILD_TYPE}")
+elseif(UNIX)
+#	set(BOTAN_HOME "botan/Botan-2.19.5_arm64_Debug")
+#	set(BOTAN_HOME "botan/Botan-2.19.5_arm64_Release")
+	set(BOTAN_HOME "botan/Botan-${BOTAN_VERSION}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
 endif()
-set(BOTAN_HOME "botan/Botan-${BOTAN_VERSION}_${winToolChain}_${targetArch}_${linkType}_${CMAKE_BUILD_TYPE}")
+
+message(STATUS "botan/Botan-${BOTAN_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
 message(STATUS "${BOTAN_HOME}")
 
 if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}")
@@ -135,10 +141,16 @@ set(TARGET_LIBRARY	"${x_lib}")
 #---------------------------------------------------------------------------------------------------
 # build botan-test
 #---------------------------------------------------------------------------------------------------
-add_executable(botan-test botan-test.cpp)
-target_include_directories(botan-test PRIVATE ${BOTAN_INCLUDE_DIR})
-target_link_directories(botan-test PRIVATE ${BOTAN_HOME})
-target_link_libraries(botan-test PRIVATE ${BOTAN_LIBRARY})
+add_executable(botan-test-static botan-test.cpp)
+target_include_directories(botan-test-static PRIVATE ${BOTAN_INCLUDE_DIR})
+#target_link_directories(botan-test PRIVATE ${BOTAN_HOME})
+#target_link_libraries(botan-test PRIVATE "botan-2")		# default: shared-library
+#target_link_libraries(botan-test PRIVATE ${BOTAN_LIBRARY})
+target_link_libraries(botan-test-static PRIVATE "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/libbotan-2.a")
+
+add_executable(botan-test-shared botan-test.cpp)
+target_include_directories(botan-test-shared PRIVATE ${BOTAN_INCLUDE_DIR})
+target_link_libraries(botan-test-shared PRIVATE "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/libbotan-2.dylib")
 
 
 #---------------------------------------------------------------------------------------------------

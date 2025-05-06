@@ -42,7 +42,7 @@ libbotan-2.a, libbotan-2.so files are created.
 #### MacOS
 ```
 cd ./botan/botan-2.19.5
-python configure.py
+python3 configure.py
 make
 ```
 libbotan-2.a, libbotan-2.19.dylib files are created.
@@ -58,6 +58,7 @@ PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1\bin\cmake\win\x64\bin
 export DYLD_LIBRARY_PATH=.
 export DYLD_LIBRARY_PATH=/Users/xuny/xdev/work/xunyss/moran/botan/Botan-2.19.5
 install > copy to "/usr/local/lib"
+or > ~/bin, ~/lib ... with .zprofile ??
 ```
 #### linux
 ```
