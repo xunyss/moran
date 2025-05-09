@@ -22,7 +22,7 @@ vcvarsall.bat x64
 # PATH=%PATH%;C:\PROGRA~2\MIB055~1\2022\BUILDT~1\VC\Tools\MSVC\1443~1.348\bin\Hostx64\x64
 
 cd ./botan/botan-2.19.5
-python configure.py --cc=msvc
+python configure.py --cc=msvc                                      (default: build shared-library)
 python configure.py --cc=msvc --debug-mode
 python configure.py --cc=msvc --enable-static-library
 python configure.py --cc=msvc --enable-static-library --debug-mode

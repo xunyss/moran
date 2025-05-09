@@ -9,46 +9,15 @@ project(moran)
 set(CMAKE_CXX_STANDARD 14)              # 20
 
 
-##########################
-## validation requirements
-file(READ "${CMAKE_SOURCE_DIR}/botan_version.txt" VERSION_STR)
-string(STRIP "${VERSION_STR}" BOTAN_VERSION)
-
-if(WIN32)
-	if(MINGW)
-		set(winToolChain "mingw")
-		set(linkType "static")
-	elseif(MSVC)
-		set(winToolChain "msvc")
-		set(linkType "shared")
-	endif()
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)			# target arch: x64/x86_64/amd64
-		set(targetArch "x64")
-	elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)		# target arch: x86/i686
-		set(targetArch "x86")
-	endif()
-	set(BOTAN_HOME "botan/Botan-${BOTAN_VERSION}_${winToolChain}_${targetArch}_${linkType}_${CMAKE_BUILD_TYPE}")
-elseif(UNIX)
-#	set(BOTAN_HOME "botan/Botan-2.19.5_arm64_Debug")
-#	set(BOTAN_HOME "botan/Botan-2.19.5_arm64_Release")
-	set(BOTAN_HOME "botan/Botan-${BOTAN_VERSION}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
-endif()
-
-message(STATUS "botan/Botan-${BOTAN_VERSION}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
-message(STATUS "${BOTAN_HOME}")
-
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}")
-	message(FATAL_ERROR "Download the Botan library: ${BOTAN_HOME}
-	botanw.bat msvc x64")
-endif()
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/build")
-	message(FATAL_ERROR "Build the Boran library: ${BOTAN_HOME}/build")
-endif()
-
-
 #---------------------------------------------------------------------------------------------------
 # cmake environment
 #---------------------------------------------------------------------------------------------------
+##########################
+set(hello "world")
+#add_subdirectory(botan)
+include(botan/build_botan.cmake)
+
+
 ##TEST
 message(STATUS "debug===")
 message(NOTICE "${CMAKE_SYSTEM_NAME}")
@@ -130,10 +99,10 @@ else()											# release
 endif()
 
 # Botan-2.17.3_{mingw|msvc}_x86_{32|64}_{|static}_{|debug}
-#set(BOTAN_HOME		"c:/xdev/works/clion-projects/botan/Botan-2.17.3_${x_cc}_x86_${x_arch}${x_link}${x_build}")
-#set(BOTAN_HOME		"c:/xdev/works/moran/botan/Botan-2.19.5")
-#set(BOTAN_INCLUDE	"${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/build/include")
-set(BOTAN_INCLUDE_DIR	"${BOTAN_HOME}/build/include")
+#set(botan_home		"c:/xdev/works/clion-projects/botan/Botan-2.17.3_${x_cc}_x86_${x_arch}${x_link}${x_build}")
+#set(botan_home		"c:/xdev/works/moran/botan/Botan-2.19.5")
+#set(BOTAN_INCLUDE	"${CMAKE_SOURCE_DIR}/${botan_home}/build/include")
+set(BOTAN_INCLUDE_DIR	"${botan_home}/build/include")
 set(BOTAN_LIBRARY	"${x_botan}")
 set(TARGET_LIBRARY	"${x_lib}")
 
@@ -141,16 +110,20 @@ set(TARGET_LIBRARY	"${x_lib}")
 #---------------------------------------------------------------------------------------------------
 # build botan-test
 #---------------------------------------------------------------------------------------------------
-add_executable(botan-test-static botan-test.cpp)
-target_include_directories(botan-test-static PRIVATE ${BOTAN_INCLUDE_DIR})
-#target_link_directories(botan-test PRIVATE ${BOTAN_HOME})
-#target_link_libraries(botan-test PRIVATE "botan-2")		# default: shared-library
-#target_link_libraries(botan-test PRIVATE ${BOTAN_LIBRARY})
-target_link_libraries(botan-test-static PRIVATE "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/libbotan-2.a")
+#add_executable(botan-test-static botan-test.cpp)
+#target_include_directories(botan-test-static PRIVATE ${BOTAN_INCLUDE_DIR})
+##target_link_directories(botan-test PRIVATE ${botan_home})
+##target_link_libraries(botan-test PRIVATE "botan-2")		# default: shared-library
+##target_link_libraries(botan-test PRIVATE ${BOTAN_LIBRARY})
+#target_link_libraries(botan-test-static PRIVATE "${CMAKE_SOURCE_DIR}/${botan_home}/libbotan-2.a")
 
 add_executable(botan-test-shared botan-test.cpp)
 target_include_directories(botan-test-shared PRIVATE ${BOTAN_INCLUDE_DIR})
-target_link_libraries(botan-test-shared PRIVATE "${CMAKE_SOURCE_DIR}/${BOTAN_HOME}/libbotan-2.dylib")
+#target_link_libraries(botan-test-shared PRIVATE "${CMAKE_SOURCE_DIR}/${botan_home}/libbotan-2.dylib")
+
+#target_link_directories(botan-test-shared PRIVATE ${botan_home})
+#target_link_libraries(botan-test-shared PRIVATE "botan")
+target_link_libraries(botan-test-shared PRIVATE "${CMAKE_SOURCE_DIR}/${botan_home}/botan.lib")	# msvc 에서 shared, static 모두 botan.lib 파일 지정
 
 
 #---------------------------------------------------------------------------------------------------
@@ -158,7 +131,7 @@ target_link_libraries(botan-test-shared PRIVATE "${CMAKE_SOURCE_DIR}/${BOTAN_HOM
 #---------------------------------------------------------------------------------------------------
 #add_library(${TARGET_LIBRARY} SHARED moran.cpp moran.h)
 #target_include_directories(${TARGET_LIBRARY} PRIVATE ${BOTAN_INCLUDE})
-#target_link_directories(${TARGET_LIBRARY} PRIVATE ${BOTAN_HOME})
+#target_link_directories(${TARGET_LIBRARY} PRIVATE ${botan_home})
 #target_link_libraries(${TARGET_LIBRARY} PRIVATE ${BOTAN_LIB})
 
 
