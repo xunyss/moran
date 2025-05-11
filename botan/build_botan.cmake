@@ -1,7 +1,10 @@
 
+#-----------------------------------------------------------------------------------------------------------------------
+# botan version
 file(READ "${CMAKE_SOURCE_DIR}/botan/version.txt" version_str)
 string(STRIP "${version_str}" botan_version)
 
+#-----------------------------------------------------------------------------------------------------------------------
 # Windows
 if(WIN32)
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)			# target arch: x64/x86_64/amd64
@@ -48,7 +51,7 @@ if(WIN32)
 		message(FATAL_ERROR "Cannot find botan library: ${botan_home}")
 	endif()
 	# print info
-	message(STATUS "[moran] OS: ${CMAKE_SYSTEM_NAME}, toolchain: ${win_toolchain}, target_arch: ${target_arch}, build_type: ${CMAKE_BUILD_TYPE}")
+	message(STATUS "[moran] environment: OS: ${CMAKE_SYSTEM_NAME}, toolchain: ${win_toolchain}, target_arch: ${target_arch}, build_type: ${CMAKE_BUILD_TYPE}")
 	if(MSVC)
 		if(enable_shared_lib)
 			message(STATUS "[moran] botan_home: ${botan_home}")
@@ -60,20 +63,26 @@ if(WIN32)
 		message(STATUS "[moran] botan_home: ${botan_home}")
 	endif()
 
+#-----------------------------------------------------------------------------------------------------------------------
 # MacOS, Linux
 elseif(UNIX)
 	set(enable_static_lib, ON)
 	set(enable_shared_lib, ON)
-	set(botan_home "botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
 
-	# print error message
-	if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${botan_home}")
-		message(FATAL_ERROR "Cannot find botan library: ${botan_home}")
+	foreach(build_type "${CMAKE_BUILD_TYPE}" "Release" "Debug")
+		set(find_dir "botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${build_type}")
+		if(EXISTS "${CMAKE_SOURCE_DIR}/${find_dir}" AND EXISTS "${CMAKE_SOURCE_DIR}/${find_dir}/build")
+			set(botan_home "${find_dir}")
+			break()
+		endif()
+	endforeach()
+	if(NOT botan_home)
+		message(FATAL_ERROR "Cannot find botan library: botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
 	endif()
-	# print info
-	message(STATUS "[moran] OS: ${CMAKE_SYSTEM_NAME}, target_arch: ${CMAKE_SYSTEM_PROCESSOR}, build_type: ${CMAKE_BUILD_TYPE}")
-	message(STATUS "[moran] botan_home: ${botan_home}")
+	message(STATUS
+			"[moran] botan_home: ${botan_home}")
 
+#-----------------------------------------------------------------------------------------------------------------------
 else()
 	message(FATAL_ERROR "Not support OS: ${CMAKE_SYSTEM_NAME}")
 
