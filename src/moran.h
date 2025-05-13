@@ -11,7 +11,7 @@
 	#ifdef DLL_EXPORTING
 		#define API_DECLSPEC __declspec(dllexport)
 	#else
-		#define API_DECLSPEC __declspec(dllimport)
+		#define API_DECLSPEC __declspec(dllimport)//dllimport
 	#endif
 #else
 	#define API_DECLSPEC
