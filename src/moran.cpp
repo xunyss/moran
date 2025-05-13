@@ -3,10 +3,10 @@
 	#define DLL_EXPORTING
 #endif
 
-#include "moran.h"
 #include <botan/pipe.h>
 #include <botan/filters.h>
 #include <botan/hex.h>
+#include "moran.h"
 
 #define CIPHER_ALGORITHM	"AES-256/CBC"
 #define HASH_ALGORITHM		"SHA-256"
