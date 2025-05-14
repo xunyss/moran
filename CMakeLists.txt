@@ -56,10 +56,6 @@ add_subdirectory(src)
 # build moran tests
 add_subdirectory(tests)
 
-#target_link_directories(botan-test-shared PRIVATE ${botan_home})
-#target_link_libraries(botan-test-shared PRIVATE "botan")
-#target_link_libraries(botan-test-shared PRIVATE "${CMAKE_SOURCE_DIR}/${botan_home}/botan.lib")	# msvc 에서 shared, static 모두 botan.lib 파일 지정
-
 ##---------------------------------------------------------------------------------------------------
 ## build sample
 ##---------------------------------------------------------------------------------------------------

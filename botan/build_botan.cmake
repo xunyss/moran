@@ -75,11 +75,11 @@ endif()
 #-----------------------------------------------------------------------------------------------------------------------
 set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home}/build/include")    # 상대경로 사용가능
 set(botan_library_dir "${CMAKE_SOURCE_DIR}/${botan_home}")                  # 상대경로 사용가능 (static 링킹시에는 full-path 절대경로 필요)
-if(MSVC)
+if(MSVC)	# MSVC
 	set(botan_library_name "botan")
 	set(botan_static_lib_filename "${botan_library_name}.lib")
-else()
+else()		# MINGW, UNIX(APPLE, LINUX)
 	set(botan_library_name "botan-2")
-	set(botan_static_lib_filename "${botan_library_name}.a")
+	set(botan_static_lib_filename "lib${botan_library_name}.a")
 endif()
 
