@@ -2,7 +2,6 @@
 #---------------------------------------------------------------------------------------------------
 # build botan-test
 #---------------------------------------------------------------------------------------------------
-
 if(UNIX OR (NOT MINGW) OR botan_home_shared)
 	if(botan_home_shared)	# MSVC
 		set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home_shared}/build/include")
