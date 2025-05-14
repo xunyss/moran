@@ -1,7 +1,5 @@
-// #define DLL_EXPORTING
-
 #include <iostream>
-#include "src/moran.h"
+#include "../src/moran.h"
 
 #define TEST_KEY    "259A0088ACFDC94E920BE1AB92CB8C8206C3D00B2174DDD4EF1EFD6EF7C393AD"
 #define TEST_IV		"764533506158694563386856796F6F75"

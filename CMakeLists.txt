@@ -49,12 +49,12 @@ message(STATUS "[moran] source_dir: ${CMAKE_SOURCE_DIR}, binary_dir: ${CMAKE_BIN
 # find botan library
 include(botan/build_botan.cmake)
 
-# build target
-# 1. botan-test 로 botan library 과 api 가 정상 동작 하는지 확인하고
-# 2. moran library 를 빌드 하고
-# 3. moran library 를 테스트 한다
-#add_executable(sample-c sample-c.c)
+# build botan-test
+add_subdirectory(botan-test)
+# build moran library
 add_subdirectory(src)
+# build moran tests
+add_subdirectory(tests)
 
 #target_link_directories(botan-test-shared PRIVATE ${botan_home})
 #target_link_libraries(botan-test-shared PRIVATE "botan")

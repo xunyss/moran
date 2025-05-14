@@ -8,10 +8,14 @@
 #endif
 
 #ifdef _WIN32
-	#ifdef DLL_EXPORTING
-		#define API_DECLSPEC __declspec(dllexport)
+	#ifdef MSVC_SHARED_LIB // cmake - target_compile_definitions
+		#ifdef DLL_EXPORTING
+			#define API_DECLSPEC __declspec(dllexport)
+		#else
+			#define API_DECLSPEC __declspec(dllimport)
+		#endif
 	#else
-		#define API_DECLSPEC __declspec(dllimport)//dllimport
+		#define API_DECLSPEC
 	#endif
 #else
 	#define API_DECLSPEC
