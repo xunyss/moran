@@ -46,22 +46,28 @@ endif()
 message(STATUS "[moran] ${env_str}")
 message(STATUS "[moran] source_dir: ${CMAKE_SOURCE_DIR}, binary_dir: ${CMAKE_BINARY_DIR}")
 
+#---------------------------------------------------------------------------------------------------
+# build
+#---------------------------------------------------------------------------------------------------
 # find botan library
 include(botan/build_botan.cmake)
 
 # build botan-test
 add_subdirectory(botan-test)
+
+# moran output setting
+set(moran_static_lib_output_name ${CMAKE_PROJECT_NAME})
+set(moran_shared_lib_output_name ${CMAKE_PROJECT_NAME})
+if(MSVC)
+	set(moran_static_lib_output_name "${CMAKE_PROJECT_NAME}_static")
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(moran_static_lib_output_name "${CMAKE_PROJECT_NAME}d_static")
+		set(moran_shared_lib_output_name "${CMAKE_PROJECT_NAME}d")
+	endif()
+endif()
 # build moran library
 add_subdirectory(src)
+
 # build moran tests
 add_subdirectory(tests)
-
-##---------------------------------------------------------------------------------------------------
-## build sample
-##---------------------------------------------------------------------------------------------------
-#add_executable(sample-cpp sample-cpp.cpp)
-#target_link_libraries(sample-cpp PRIVATE moran_static_lib_botan-static)
-
-#add_executable(sample-c sample-c.c)
-#target_link_libraries(sample-c PRIVATE moran_static_lib_botan-static)
 
