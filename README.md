@@ -7,7 +7,8 @@ https://botan.randombit.net/#botan2
 
 #### Windows with MinGW
 ```
-PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1\bin\mingw\bin
+# for configure.py ..., mingw32-make.exe, execute mingw binary
+PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1.1\bin\mingw\bin
 
 cd ./botan/botan-2.19.5
 python configure.py --os=mingw
@@ -43,6 +44,7 @@ libbotan-2.a, libbotan-2.so files are created.
 ```
 cd ./botan/botan-2.19.5
 python3 configure.py
+python3 configure.py --debug-mode
 make
 ```
 libbotan-2.a, libbotan-2.19.dylib files are created.
