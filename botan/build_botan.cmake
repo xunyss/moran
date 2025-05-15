@@ -87,6 +87,6 @@ if(MSVC)
 # MINGW, UNIX(APPLE, LINUX)
 else()
 	set(botan_library_name "botan-2")
-	set(botan_static_lib_filepath "${botan_library_dir}/lib${botan_library_name}.a")
+	set(botan_static_lib_filepath "${botan_shared_library_dir}/lib${botan_library_name}.a")
 endif()
 
