@@ -52,7 +52,7 @@ libbotan-2.a, libbotan-2.19.dylib files are created.
 # tmp
 #### win
 ```
-PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1\bin\cmake\win\x64\bin
+PATH=%PATH%;C:\Program Files (x86)\JetBrains\CLion 2025.1.1\bin\cmake\win\x64\bin
 ```
 #### mac
 ```
