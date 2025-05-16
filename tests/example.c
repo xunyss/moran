@@ -2,9 +2,9 @@
 #include <string.h>
 #include "../src/moran.h"
 
-#define TEST_KEY    "259A0088ACFDC94E920BE1AB92CB8C8206C3D00B2174DDD4EF1EFD6EF7C393AD"
-#define TEST_IV		"764533506158694563386856796F6F75"
-#define TEST_SALT   "832B15B4F9E5D2E123567A5CC95DF78A"
+#define TEST_KEY    "06C3D00B2174DDD4EF1EFD6EF7C393AD259A0088ACFDC94E920BE1AB92CB8C82"
+#define TEST_IV		"63386856796F6F757645335061586945"
+#define TEST_SALT   "23567A5CC95DF78A832B15B4F9E5D2E1"
 
 
 int main()
@@ -26,7 +26,7 @@ int main()
 	encrypt((char*) hex_key, (char*) hex_iv, (char*) plain, plain_length, (char*) cipher, &cipher_length);
 	printf("success: %s, %dbytes\n", cipher, cipher_length);
 
-	strcpy((char*) cipher, "bTVHTeQP+8i8fR8kJIjDrQ==");
+	strcpy((char*) cipher, "4RP470/Uyh1m0RV2ZkO4rA==");
 	cipher_length = (int) strlen((char*)cipher);
 	memset(plain, 0x00, sizeof(plain));
 	decrypt((char*) hex_key, (char*) hex_iv, (char*) cipher, cipher_length, (char*) plain, &plain_length);

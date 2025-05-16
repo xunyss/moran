@@ -11,10 +11,6 @@
 #define CIPHER_ALGORITHM	"AES-256/CBC"
 #define HASH_ALGORITHM		"SHA-256"
 
-//	#define TEST_KEY		"259A0088ACFDC94E920BE1AB92CB8C8206C3D00B2174DDD4EF1EFD6EF7C393AD"
-//	#define TEST_IV			"764533506158694563386856796F6F75"
-//	#define TEST_SALT		"832B15B4F9E5D2E123567A5CC95DF78A"
-
 
 std::string encrypt(std::string hex_key, std::string hex_iv, std::string plain)
 {
@@ -28,7 +24,7 @@ std::string encrypt(std::string hex_key, std::string hex_iv, std::string plain)
 		return pipe.read_all_as_string(0);
 	}
 	catch (Botan::Exception &ex) {
-		throw TBCryptoException(static_cast<int>(ex.error_type()), to_string(ex.error_type()), ex.what());
+		throw MoranException(static_cast<int>(ex.error_type()), to_string(ex.error_type()), ex.what());
 	}
 }
 
@@ -44,7 +40,7 @@ std::string decrypt(std::string hex_key, std::string hex_iv, std::string cipher)
 		return pipe.read_all_as_string(0);
 	}
 	catch (Botan::Exception &ex) {
-		throw TBCryptoException(static_cast<int>(ex.error_type()), to_string(ex.error_type()), ex.what());
+		throw MoranException(static_cast<int>(ex.error_type()), to_string(ex.error_type()), ex.what());
 	}
 }
 
@@ -60,7 +56,7 @@ std::string hash(std::string hex_salt, std::string plain)
 		return pipe.read_all_as_string(0);
 	}
 	catch (Botan::Exception &ex) {
-		throw TBCryptoException(static_cast<int>(ex.error_type()), to_string(ex.error_type()), ex.what());
+		throw MoranException(static_cast<int>(ex.error_type()), to_string(ex.error_type()), ex.what());
 	}
 }
 
@@ -76,7 +72,7 @@ int encrypt(char* hex_key, char* hex_iv,
 		*cipher_length = output.length();
 		return CRYPTO_SUCCESS;
 	}
-	catch (TBCryptoException &ex) {
+	catch (MoranException &ex) {
 		return ex.error_code();
 	}
 }
@@ -92,7 +88,7 @@ int decrypt(char* hex_key, char* hex_iv,
 		*plain_length = output.length();
 		return CRYPTO_SUCCESS;
 	}
-	catch (TBCryptoException &ex) {
+	catch (MoranException &ex) {
 		return ex.error_code();
 	}
 }
@@ -108,7 +104,7 @@ int hash(char* hex_salt,
 		*cipher_length = output.length();
 		return CRYPTO_SUCCESS;
 	}
-	catch (TBCryptoException &ex) {
+	catch (MoranException &ex) {
 		return ex.error_code();
 	}
 }

@@ -11,8 +11,8 @@ void test_sha256_salt();
 void test_aes256_cbc()
 {
 	const std::string algorithm = "AES-256/CBC";
-	const std::vector<uint8_t> key = Botan::hex_decode("259A0088ACFDC94E920BE1AB92CB8C8206C3D00B2174DDD4EF1EFD6EF7C393AD");
-	const std::vector<uint8_t> iv = Botan::hex_decode("764533506158694563386856796F6F75");
+	const std::vector<uint8_t> key = Botan::hex_decode("06C3D00B2174DDD4EF1EFD6EF7C393AD259A0088ACFDC94E920BE1AB92CB8C82");
+	const std::vector<uint8_t> iv = Botan::hex_decode("63386856796F6F757645335061586945");
 
 
 	// encryption
@@ -30,7 +30,7 @@ void test_aes256_cbc()
 
 
 	// decryption
-	const std::string str_cipher = "bTVHTeQP+8i8fR8kJIjDrQ==";
+	const std::string str_cipher = "4RP470/Uyh1m0RV2ZkO4rA==";
 	Botan::secure_vector<uint8_t> dec_buffer = Botan::base64_decode(str_cipher);
 
 	std::unique_ptr<Botan::Cipher_Mode> dec = Botan::Cipher_Mode::create(algorithm, Botan::DECRYPTION);
@@ -46,10 +46,10 @@ void test_aes256_cbc()
 void test_sha256_salt()
 {
 	const std::string algorithm = "SHA-256";
-	const std::string salt = "832B15B4F9E5D2E123567A5CC95DF78A";
+	const std::string salt = "23567A5CC95DF78A832B15B4F9E5D2E1";
 
 	const std::string str_plain = "2021";
-	const std::string str_expected = "CiO4jpxKfKvJC62BUcgxV0VwPbQf4gWu2X2Qvi70Vo4=";
+	const std::string str_expected = "Ub00MxISy8HDaHKCWJZ42fwam9jHdWt6xGOcpjHw5kk=";
 	std::vector<uint8_t> message = Botan::hex_decode(salt);
 	message.insert(std::end(message), str_plain.begin(), str_plain.end());
 

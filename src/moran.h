@@ -36,14 +36,14 @@
 
 #include <iostream>
 
-class TBCryptoException: public std::exception
+class MoranException: public std::exception
 {
 private:
 	int m_code;
 	std::string m_type, m_msg;
 public:
-	explicit TBCryptoException(const int code, const std::string& type, const std::string& msg): m_code(code), m_type(type), m_msg(msg) {}
-	~TBCryptoException() throw() {};
+	explicit MoranException(const int code, const std::string& type, const std::string& msg): m_code(code), m_type(type), m_msg(msg) {}
+	~MoranException() throw() {};
 	int error_code() const { return m_code; }
 	const char* error_type() const { return m_type.c_str(); }
 	const char* what() const throw() { return m_msg.c_str(); }
