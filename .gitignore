@@ -1,4 +1,5 @@
 /botan/Botan-*
+/build
 
 /cmake-build-*
 /.idea
