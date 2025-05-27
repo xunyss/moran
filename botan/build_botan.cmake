@@ -61,7 +61,16 @@ elseif(UNIX)
 		endif()
 	endforeach()
 	if(NOT botan_home)
-		message(FATAL_ERROR "[moran] Cannot find botan library: botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
+		execute_process(
+				COMMAND bash ${CMAKE_SOURCE_DIR}/botan/get_botan Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}
+				WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/botan
+				RESULT_VARIABLE get_botan_script_result
+		)
+		if(NOT get_botan_script_result EQUAL 0)
+			message(FATAL_ERROR "Failed to execute get_botan: ${get_botan_script_result}")
+		endif()
+		message(FATAL_ERROR
+				"[moran] Cannot find botan library: botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
 	endif()
 	message(STATUS "[moran] botan_home: ${botan_home}")
 

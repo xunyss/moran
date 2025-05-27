@@ -1,0 +1,52 @@
+#! /bin/bash
+
+# check if parameter is provided
+if [ $# -ne 1 ]; then
+    echo "[get_botan] Usage: $0 <botan_build_directory>"
+    exit 1
+fi
+
+# check if version.txt exists
+if [ ! -f "version.txt" ]; then
+    echo "[get_botan] Error: version.txt file not found!"
+    exit 1
+fi
+
+# check if botan_build_directory exists
+if [ -d "$1" ]; then
+    echo "[get_botan] directory '$1' already exists"
+    echo "[get_botan] build botan library at '$1'"
+    exit 0
+fi
+
+
+BOTAN_VERSION=$(cat version.txt | tr -d '[:space:]')
+BOTAN_FILE="Botan-${BOTAN_VERSION}.tar.xz"
+
+# check if botan_release exists in botan directory
+if [ ! -f "${BOTAN_FILE}" ]; then
+    echo "[get_botan] Downloading ${BOTAN_FILE} ..."
+    curl -O "https://botan.randombit.net/releases/${BOTAN_FILE}"
+else
+    echo "[get_botan] ${BOTAN_FILE} already exists"
+fi
+
+
+# make temp dir
+TEMP_DIR=$(mktemp -d)
+if [ $? -ne 0 ]; then
+    echo "[get_botan] Error: Failed to create temp directory"
+    exit 1
+fi
+# remove temp dir at exit
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+echo "[get_botan] extracting Botan-${BOTAN_VERSION}.tar.xz"
+tar xf "${BOTAN_FILE}" -C "${TEMP_DIR}"
+mv "${TEMP_DIR}/Botan-${BOTAN_VERSION}" "$1"
+if [ $? -ne 0 ]; then
+    echo "[get_botan] Error: Failed to move directory"
+    exit 1
+fi
+echo "[get_botan] build botan library at '$1'"
+
