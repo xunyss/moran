@@ -5,6 +5,37 @@ file(READ "${CMAKE_SOURCE_DIR}/botan/version.txt" version_str)
 string(STRIP "${version_str}" botan_version)
 
 #-----------------------------------------------------------------------------------------------------------------------
+# functions
+# run_get_botan_script
+function(run_get_botan_script botan_dir_name)
+	if(WIN32)
+		execute_process(
+				COMMAND cmd /c "${CMAKE_SOURCE_DIR}/botan/get_botan.bat" "${botan_dir_name}"
+				WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/botan
+				RESULT_VARIABLE get_botan_script_result
+		)
+	else()
+		execute_process(
+				COMMAND bash ${CMAKE_SOURCE_DIR}/botan/get_botan "${botan_dir_name}"
+				WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/botan
+				RESULT_VARIABLE get_botan_script_result
+		)
+	endif()
+	if(NOT get_botan_script_result EQUAL 0)
+		message(FATAL_ERROR "Failed to execute get_botan script: ${get_botan_script_result}")
+	endif()
+endfunction()
+
+# check_botan_home_dir
+function(check_botan_home_dir botan_home_dir result_var)
+	if(EXISTS "${CMAKE_SOURCE_DIR}/${botan_home_dir}" AND EXISTS "${CMAKE_SOURCE_DIR}/${botan_home_dir}/build")
+		set(${result_var} "${botan_home_dir}" PARENT_SCOPE)
+		return()
+	endif()
+	set(${result_var} "" PARENT_SCOPE)
+endfunction()
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Windows
 if(WIN32)
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)			# target arch: x64/x86_64/amd64
@@ -18,29 +49,31 @@ if(WIN32)
 		set(win_toolchain "mingw")
 		foreach(build_type "${CMAKE_BUILD_TYPE}" "Release" "Debug")
 			set(find_dir "botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_${build_type}")
-			if(EXISTS "${CMAKE_SOURCE_DIR}/${find_dir}" AND EXISTS "${CMAKE_SOURCE_DIR}/${find_dir}/build")
-				set(botan_home "${find_dir}")
+			check_botan_home_dir(${find_dir} botan_home)
+			if(botan_home)
 				break()
 			endif()
 		endforeach()
 		if(NOT botan_home)
-			message(FATAL_ERROR "[moran] Cannot find botan library: botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_${CMAKE_BUILD_TYPE}")
+			set(botan_dir_name "Botan-${botan_version}_${win_toolchain}_${target_arch}_${CMAKE_BUILD_TYPE}")
+			run_get_botan_script("${botan_dir_name}")
+			message(FATAL_ERROR "[moran] Cannot find botan build: botan/${botan_dir_name}")
 		endif()
 		message(STATUS "[moran] botan_home: ${botan_home}")
 
 	# msvc: Debug <-> Release 간 호출 불가능, Botan - shared-library, static-library 각각 빌드 해야 함
 	elseif(MSVC)
 		set(win_toolchain "msvc")
-		set(botan_home_shared "botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_shared_${CMAKE_BUILD_TYPE}")
-		set(botan_home_static "botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_static_${CMAKE_BUILD_TYPE}")
-		if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${botan_home_shared}/build")
-			set(botan_home_shared "")
-		endif()
-		if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${botan_home_static}/build")
-			set(botan_home_static "")
-		endif()
+		set(link_types "shared;static")
+		foreach(link_type ${link_types})
+			set(find_dir "botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_${link_type}_${CMAKE_BUILD_TYPE}")
+			check_botan_home_dir(${find_dir} botan_home_${link_type})
+		endforeach()
 		if(NOT botan_home_shared AND NOT botan_home_static)
-			message(FATAL_ERROR "[moran] Cannot find botan library: botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_{shared|static}}_${CMAKE_BUILD_TYPE}")
+			foreach(link_type ${link_types})
+				run_get_botan_script("Botan-${botan_version}_${win_toolchain}_${target_arch}_${link_type}_${CMAKE_BUILD_TYPE}")
+			endforeach()
+			message(FATAL_ERROR "[moran] Cannot find botan build: botan/Botan-${botan_version}_${win_toolchain}_${target_arch}_{shared|static}_${CMAKE_BUILD_TYPE}")
 		endif()
 		message(STATUS "[moran] botan_home_shared: ${botan_home_shared}")
 		message(STATUS "[moran] botan_home_static: ${botan_home_static}")
@@ -55,22 +88,15 @@ if(WIN32)
 elseif(UNIX)
 	foreach(build_type "${CMAKE_BUILD_TYPE}" "Release" "Debug")
 		set(find_dir "botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${build_type}")
-		if(EXISTS "${CMAKE_SOURCE_DIR}/${find_dir}" AND EXISTS "${CMAKE_SOURCE_DIR}/${find_dir}/build")
-			set(botan_home "${find_dir}")
+		check_botan_home_dir(${find_dir} botan_home)
+		if(botan_home)
 			break()
 		endif()
 	endforeach()
 	if(NOT botan_home)
-		execute_process(
-				COMMAND bash ${CMAKE_SOURCE_DIR}/botan/get_botan Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}
-				WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/botan
-				RESULT_VARIABLE get_botan_script_result
-		)
-		if(NOT get_botan_script_result EQUAL 0)
-			message(FATAL_ERROR "Failed to execute get_botan: ${get_botan_script_result}")
-		endif()
-		message(FATAL_ERROR
-				"[moran] Cannot find botan library: botan/Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
+		set(botan_dir_name "Botan-${botan_version}_${CMAKE_SYSTEM_NAME}_${CMAKE_SYSTEM_PROCESSOR}_${CMAKE_BUILD_TYPE}")
+		run_get_botan_script("${botan_dir_name}")
+		message(FATAL_ERROR "[moran] Cannot find botan build: botan/${botan_dir_name}")
 	endif()
 	message(STATUS "[moran] botan_home: ${botan_home}")
 

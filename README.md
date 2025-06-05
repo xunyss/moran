@@ -56,6 +56,8 @@ libbotan-2.a, libbotan-2.19.dylib files are created.
 
 git clone --depth=1 https://github.com/xunyss/moran.git
 cmake -S . -B ./build
+cd build
+make
 ```
 ### MinGW
 ```

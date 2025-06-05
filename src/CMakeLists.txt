@@ -14,6 +14,7 @@ if(UNIX OR MINGW OR (MSVC AND botan_home_static))
 	set_target_properties(moran_static_lib PROPERTIES OUTPUT_NAME ${moran_static_lib_output_name})
 	target_include_directories(moran_static_lib PRIVATE ${botan_include_dir})
 	# add_library(.. STATIC ..) 일 경우, target_link_libraries(any_link_type) 는 output_static_lib 에 영향을 주지 않음
+	# TODO: botan_static_lib 을 포함 하는 moran_static 생성
 
 	#-----------------------------------------------------------------------------------------------
 	# [2] build shared-library: link botan-static-library (recommend)

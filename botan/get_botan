@@ -20,33 +20,49 @@ if [ -d "$1" ]; then
 fi
 
 
+# get version from version.txt
 BOTAN_VERSION=$(cat version.txt | tr -d '[:space:]')
 BOTAN_FILE="Botan-${BOTAN_VERSION}.tar.xz"
 
-# check if botan_release exists in botan directory
+# check if botan_release exists / download botan_release
 if [ ! -f "${BOTAN_FILE}" ]; then
     echo "[get_botan] Downloading ${BOTAN_FILE} ..."
     curl -O "https://botan.randombit.net/releases/${BOTAN_FILE}"
+    if [ $? -ne 0 ]; then
+        echo "[get_botan] Error: Failed to download file"
+        exit 1
+    fi
 else
     echo "[get_botan] ${BOTAN_FILE} already exists"
 fi
 
-
-# make temp dir
+# create temp directory
 TEMP_DIR=$(mktemp -d)
 if [ $? -ne 0 ]; then
     echo "[get_botan] Error: Failed to create temp directory"
     exit 1
 fi
-# remove temp dir at exit
+# cleanup temp directory at exit
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-echo "[get_botan] extracting Botan-${BOTAN_VERSION}.tar.xz"
+# extract tar file
+echo "[get_botan] extracting ${BOTAN_FILE}"
 tar xf "${BOTAN_FILE}" -C "${TEMP_DIR}"
+if [ $? -ne 0 ]; then
+    echo "[get_botan] Error: Failed to extract file"
+    rm -rf "${TEMP_DIR}"
+    exit 1
+fi
 mv "${TEMP_DIR}/Botan-${BOTAN_VERSION}" "$1"
 if [ $? -ne 0 ]; then
     echo "[get_botan] Error: Failed to move directory"
+    rm -rf "${TEMP_DIR}"
     exit 1
 fi
+
+# cleanup temp directory
+rm -rf "${TEMP_DIR}"
+
+# message
 echo "[get_botan] build botan library at '$1'"
 
