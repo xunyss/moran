@@ -108,8 +108,18 @@ endif()
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home}/build/include")	# 상대경로 사용가능
-set(botan_shared_library_dir "${CMAKE_SOURCE_DIR}/${botan_home}")			# 상대경로 사용가능 (static 링킹시에는 full-path 절대경로 필요)
+string(REGEX MATCH "^[0-9]+" botan_major_version "${botan_version}")	# boran major version (2, 3)
+if(botan_major_version STREQUAL "2")	# botan version 2.x.x
+	set(botan_include_sub_path "build/include")
+else()									# botan version 3.x.x
+	set(botan_include_sub_path "build/include/public")
+endif()
+
+# target_include_directories 에서 상대 경로 사용 가능
+set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home}/${botan_include_sub_path}")
+# target_link_directories 에서 상대 경로 사용 가능 (static 링킹 시에는 full-path 절대 경로 필요)
+set(botan_shared_library_dir "${CMAKE_SOURCE_DIR}/${botan_home}")
+
 # MSVC
 if(MSVC)
 	if(botan_home_shared)
@@ -121,7 +131,7 @@ if(MSVC)
 	endif()
 # MINGW, UNIX(APPLE, LINUX)
 else()
-	set(botan_library_name "botan-2")
+	set(botan_library_name "botan-${botan_major_version}")
 	set(botan_static_lib_filepath "${botan_shared_library_dir}/lib${botan_library_name}.a")
 endif()
 

@@ -4,7 +4,7 @@
 #===================================================================================================
 if(UNIX OR MINGW OR (MSVC AND botan_home_static))
 	if(MSVC AND botan_home_static)
-		set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home_static}/build/include")
+		set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home_static}/${botan_include_sub_path}")
 	endif()
 
 	#-----------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ endif()
 
 if(UNIX OR (MSVC AND botan_home_shared))
 	if(MSVC AND botan_home_shared)
-		set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home_shared}/build/include")
+		set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home_shared}/${botan_include_sub_path}")
 	endif()
 
 	#-----------------------------------------------------------------------------------------------
