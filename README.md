@@ -15,7 +15,7 @@ python configure.py --os=mingw
 python configure.py --os=mingw --debug-mode
 make (or mingw32-make.exe)
 ```
-libbotan-2.a file is created. (shared libs not supported on mingw)
+libbotan-2.a file is created. (shared libs are not supported on mingw)
 
 ### Windows with MSVC
 ```
@@ -50,7 +50,7 @@ make
 libbotan-2.a, libbotan-2.19.dylib files are created.
 
 ## build moran
-### Linux
+### Linux, MacOS
 ```
 # TODO: install cmake
 

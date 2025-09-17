@@ -10,16 +10,18 @@ void test_sha256_salt();
 
 void test_aes256_cbc()
 {
+//	const std::string algorithm = "AES-256/CBC/PKCS7";
 	const std::string algorithm = "AES-256/CBC";
 	const std::vector<uint8_t> key = Botan::hex_decode("06C3D00B2174DDD4EF1EFD6EF7C393AD259A0088ACFDC94E920BE1AB92CB8C82");
-	const std::vector<uint8_t> iv = Botan::hex_decode("63386856796F6F757645335061586945");
+	const std::vector<uint8_t> iv  = Botan::hex_decode("63386856796F6F757645335061586945");
 
 
 	// encryption
 	const std::string str_plain = "1234";
 	Botan::secure_vector<uint8_t> enc_buffer = Botan::secure_vector<uint8_t>(str_plain.begin(), str_plain.end());
 
-	std::unique_ptr<Botan::Cipher_Mode> enc = Botan::Cipher_Mode::create(algorithm, Botan::ENCRYPTION);
+	std::unique_ptr<Botan::Cipher_Mode> enc = Botan::Cipher_Mode::create_or_throw(algorithm, Botan::ENCRYPTION);
+//	std::unique_ptr<Botan::Cipher_Mode> enc = Botan::Cipher_Mode::create_or_throw(algorithm, Botan::Cipher_Dir::Encryption);
 	enc->set_key(key);
 	enc->start(iv);
 	enc->finish(enc_buffer);
@@ -33,7 +35,8 @@ void test_aes256_cbc()
 	const std::string str_cipher = "4RP470/Uyh1m0RV2ZkO4rA==";
 	Botan::secure_vector<uint8_t> dec_buffer = Botan::base64_decode(str_cipher);
 
-	std::unique_ptr<Botan::Cipher_Mode> dec = Botan::Cipher_Mode::create(algorithm, Botan::DECRYPTION);
+	std::unique_ptr<Botan::Cipher_Mode> dec = Botan::Cipher_Mode::create_or_throw(algorithm, Botan::DECRYPTION);
+//	std::unique_ptr<Botan::Cipher_Mode> dec = Botan::Cipher_Mode::create_or_throw(algorithm, Botan::Cipher_Dir::Decryption);
 	dec->set_key(key);
 	dec->start(iv);
 	dec->finish(dec_buffer); dec_buffer.shrink_to_fit();

@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 3.17)    # 3.31
 project(moran)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)				# botan 2.x requires at least C++11
 #set(CMAKE_CXX_STANDARD 20)				# botan 3.x requires at least C++20
 
 #---------------------------------------------------------------------------------------------------
