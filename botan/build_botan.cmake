@@ -22,7 +22,7 @@ function(run_get_botan_script botan_dir_name)
 		)
 	endif()
 	if(NOT get_botan_script_result EQUAL 0)
-		message(FATAL_ERROR "Failed to execute get_botan script: ${get_botan_script_result}")
+		message(FATAL_ERROR "[moran] Failed to execute get_botan script: ${get_botan_script_result}")
 	endif()
 endfunction()
 
@@ -102,7 +102,7 @@ elseif(UNIX)
 
 #-----------------------------------------------------------------------------------------------------------------------
 else()
-	message(FATAL_ERROR "Not support OS: ${CMAKE_SYSTEM_NAME}")
+	message(FATAL_ERROR "[moran] Not support OS: ${CMAKE_SYSTEM_NAME}")
 
 endif()
 
@@ -117,6 +117,7 @@ endif()
 
 # target_include_directories 에서 상대 경로 사용 가능
 set(botan_include_dir "${CMAKE_SOURCE_DIR}/${botan_home}/${botan_include_sub_path}")
+message(STATUS "[moran] botan_include_dir: ${botan_include_dir}")
 # target_link_directories 에서 상대 경로 사용 가능 (static 링킹 시에는 full-path 절대 경로 필요)
 set(botan_shared_library_dir "${CMAKE_SOURCE_DIR}/${botan_home}")
 
@@ -124,14 +125,21 @@ set(botan_shared_library_dir "${CMAKE_SOURCE_DIR}/${botan_home}")
 if(MSVC)
 	if(botan_home_shared)
 		set(botan_shared_library_dir "${CMAKE_SOURCE_DIR}/${botan_home_shared}")
+		message(STATUS "[moran] botan_shared_library_dir: ${botan_shared_library_dir}")
 	endif()
 	set(botan_library_name "botan")
+	message(STATUS "[moran] botan_library_name: ${botan_library_name}")
 	if(botan_home_static)
 		set(botan_static_lib_filepath "${CMAKE_SOURCE_DIR}/${botan_home_static}/${botan_library_name}.lib")
+		message(STATUS "[moran] botan_static_lib_filepath: ${botan_static_lib_filepath}")
 	endif()
 # MINGW, UNIX(APPLE, LINUX)
 else()
 	set(botan_library_name "botan-${botan_major_version}")
 	set(botan_static_lib_filepath "${botan_shared_library_dir}/lib${botan_library_name}.a")
+
+	message(STATUS "[moran] botan_shared_library_dir: ${botan_shared_library_dir}")
+	message(STATUS "[moran] botan_library_name: ${botan_library_name}")
+	message(STATUS "[moran] botan_static_lib_filepath: ${botan_static_lib_filepath}")
 endif()
 
